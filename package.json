@@ -1,6 +1,6 @@
 {
   "name": "prose-slop",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Lint the prose you publish for AI slop, in English and Spanish. Vocabulary, sentence patterns and the cadence of the whole document. Zero dependencies.",
   "keywords": [
     "ai-slop",

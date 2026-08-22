@@ -338,6 +338,29 @@ test('bolded listicle lead-ins are flagged, a definition list is not', () => {
   assert.ok(!md(definiciones).includes('structure.listicle-bullets'));
 });
 
+test('uniform paragraphs need four blocks, and a short post now reaches the check', () => {
+  // 100 words in four even paragraphs: the word floor used to sit at 120, which
+  // put every short post out of reach of the rule.
+  const parrafo = (n) =>
+    `Este es el parrafo numero ${n} del texto y tiene exactamente el mismo tamano que todos los demas parrafos que vienen despues de el.`;
+  const cuatro = [1, 2, 3, 4].map(parrafo).join('\n\n');
+  assert.ok(ids(cuatro).includes('structure.uniform-paragraphs'));
+
+  // Three is not enough evidence. Measured over 173 files, three even paragraphs
+  // were short notes that happened to match in length, even at a 0.12 cutoff.
+  const tres = [1, 2, 3].map(parrafo).join('\n\n');
+  assert.ok(!ids(tres).includes('structure.uniform-paragraphs'));
+});
+
+test('a heading glued to its list is not a paragraph', () => {
+  // Regression: "## Pipeline" with no blank line before the bullets parsed as
+  // one prose paragraph, so a dashboard of headed lists read as even cadence.
+  const dashboard = [1, 2, 3, 4]
+    .map((n) => `## Seccion ${n}\n- **Un item con nombre largo**: con su detalle correspondiente adentro.\n- **Otro item con nombre**: y su detalle.`)
+    .join('\n\n');
+  assert.ok(!md(dashboard).includes('structure.uniform-paragraphs'));
+});
+
 test('cadence rules stay out of note-shaped blocks', () => {
   const notas = '## Focus\n\nOne thing: validar.\nWhy: importa.\nQuien: yo.\nCuando: hoy.\n';
   assert.deepStrictEqual(md(notas).filter((i) => i.startsWith('structure')), []);

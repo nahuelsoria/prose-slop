@@ -95,7 +95,7 @@ Seven cadence rules run over the parsed document instead of over a span of text:
 | `structure.closing-question` | It ends on a question aimed at the reader |
 | `structure.parallel-openers` | Three or more sentences in a row start with the same word |
 | `structure.uniform-rhythm` | Every sentence is about the same length |
-| `structure.uniform-paragraphs` | Every paragraph is the same size |
+| `structure.uniform-paragraphs` | Every paragraph is the same size, from four paragraphs up |
 | `structure.listicle-bullets` | Three or more bullets open with the same bolded lead-in |
 | `structure.fragment-drama` | One-beat fragments used as a tic (opt-in, see below) |
 
@@ -105,6 +105,13 @@ calling it an error.
 They only run on flowing prose. A block of short lines is a note, a spec or a CV,
 so cadence rules skip it, and so do quoted lines, tables and headings. That gate
 is what took the false positives on a 173-file corpus from 47 down to 12.
+
+Every threshold in there is measured rather than picked. `uniform-paragraphs`
+needs four paragraphs because at three the coefficient of variation is too noisy
+an estimator: on that corpus it kept flagging three-line notes that matched in
+length by accident, and it still did at a 0.12 cutoff. The word floor went the
+other way. Dropping it from 120 words to 90 added no findings at all, and it is
+what lets the rule reach a short post.
 
 `structure.fragment-drama` ships off by default. The tic is real, but on that
 same corpus it only ever fired on CVs, trackers and prompt files, never on
@@ -213,6 +220,10 @@ files from a personal vault and a working publishing repo, `prose-slop` reports
 388 errors, and 375 of them are the typographic characters. Of the 13 that are
 left, 9 are binary contrasts and 4 are marketing vocabulary. The rules stay quiet
 on prose that a person wrote, which is the whole design target.
+
+The two documents still flagged for paragraph cadence turned out to be written by
+an agent, one of them addressing its own author in the second person. Reading the
+findings one by one is what keeps a threshold honest.
 
 The cadence rules report 12 findings across those same 173 files. Reading them
 one by one is worth the trouble: the documents behind the rhythm warnings turned
