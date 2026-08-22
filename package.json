@@ -1,0 +1,48 @@
+{
+  "name": "prose-slop",
+  "version": "0.1.0",
+  "description": "Lint the prose you publish for AI slop, in English and Spanish. Em dashes, banned vocabulary and the structural patterns. Zero dependencies.",
+  "keywords": [
+    "ai-slop",
+    "slop",
+    "lint",
+    "prose",
+    "writing",
+    "markdown",
+    "em-dash",
+    "editing",
+    "spanish",
+    "espanol",
+    "ai-detection",
+    "content"
+  ],
+  "license": "MIT",
+  "author": "Nahuel Soria",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nahuelsoria/prose-slop.git"
+  },
+  "homepage": "https://github.com/nahuelsoria/prose-slop#readme",
+  "bugs": {
+    "url": "https://github.com/nahuelsoria/prose-slop/issues"
+  },
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "bin": {
+    "slop": "bin/prose-slop.js",
+    "prose-slop": "bin/prose-slop.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "rules/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node test/run.js"
+  }
+}

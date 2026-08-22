@@ -1,0 +1,12 @@
+{
+  "_comment": "Typographic tells. These are the only rules prose-slop rewrites for you: the substitution is mechanical and cannot change what a sentence means. Ported from the no_slop.json table that has been gating a whole agent fleet since 2026-08-12. Two entries share the smart-quote id on purpose, so disabling the rule kills both halves of the pair.",
+  "replacements": [
+    { "id": "em-dash",     "char": "—", "with": ",",                       "name": "em dash" },
+    { "id": "en-dash",     "char": "–", "with": ",",                       "name": "en dash" },
+    { "id": "arrow",       "char": "→", "with": { "en": " to ", "es": " a " }, "name": "arrow" },
+    { "id": "smart-quote", "char": "“", "with": "\"",                      "name": "curly double quote" },
+    { "id": "smart-quote", "char": "”", "with": "\"",                      "name": "curly double quote" },
+    { "id": "smart-apos",  "char": "‘", "with": "'",                       "name": "curly single quote" },
+    { "id": "smart-apos",  "char": "’", "with": "'",                       "name": "curly single quote" }
+  ]
+}

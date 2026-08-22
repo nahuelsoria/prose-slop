@@ -1,0 +1,157 @@
+{
+  "_comment": "Structural patterns. These survive translation, so most of them ship in both languages. Boundaries are written as Unicode lookarounds instead of \\b because \\b is ASCII-only and would misfire on acentos and ñ.",
+  "patterns": [
+    {
+      "id": "binary-contrast",
+      "lang": "en",
+      "severity": "error",
+      "message": "Binary contrast. State the second half directly and drop the first.",
+      "regexes": [
+        "(?<!\\p{L})it'?s not (?:just )?[^.!?\\n]{1,60}[,.]\\s*it'?s(?!\\p{L})",
+        "(?<!\\p{L})the question (?:isn'?t|is not)(?!\\p{L})",
+        "(?<!\\p{L})not just[^.!?\\n]{1,60}(?<!\\p{L})but(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "binary-contrast",
+      "lang": "es",
+      "severity": "error",
+      "message": "Contraste binario. Decí la segunda mitad y borrá la primera.",
+      "regexes": [
+        "(?<!\\p{L})no se trata de[^.!?\\n]{1,80}[.,]\\s*se trata de(?!\\p{L})",
+        "(?<!\\p{L})no es s[oó]lo[^.!?\\n]{1,80}(?<!\\p{L})sino(?!\\p{L})",
+        "(?<!\\p{L})la pregunta no es(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "throat-clearing",
+      "lang": "en",
+      "severity": "error",
+      "message": "Throat-clearing opener. Cut it and state the point.",
+      "regexes": [
+        "(?<!\\p{L})here'?s (?:the thing|what i mean)(?!\\p{L})",
+        "(?<!\\p{L})let me be clear(?!\\p{L})",
+        "(?<!\\p{L})i'?ll be honest(?!\\p{L})",
+        "(?<!\\p{L})the uncomfortable truth is(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "throat-clearing",
+      "lang": "es",
+      "severity": "error",
+      "message": "Carraspeo de apertura. Cortalo y decí el punto.",
+      "regexes": [
+        "(?<!\\p{L})ac[áa] va la cosa(?!\\p{L})",
+        "(?<!\\p{L})te lo digo claro(?!\\p{L})",
+        "(?<!\\p{L})voy a ser honesto(?!\\p{L})",
+        "(?<!\\p{L})seamos sinceros(?!\\p{L})",
+        "(?<!\\p{L})la verdad inc[óo]moda(?!\\p{L})",
+        "(?<!\\p{L})empecemos por el principio(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "faux-insight",
+      "lang": "en",
+      "severity": "error",
+      "message": "Faux-insight setup. It flatters the writer. Make the claim stand on its own.",
+      "regexes": [
+        "(?<!\\p{L})the part (?:most people|everyone) (?:skips?|misses?)(?!\\p{L})",
+        "(?<!\\p{L})what most people get wrong(?!\\p{L})",
+        "(?<!\\p{L})here'?s what nobody tells you(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "faux-insight",
+      "lang": "es",
+      "severity": "error",
+      "message": "Falsa revelación. Te pone de único experto. Que la afirmación se sostenga sola.",
+      "regexes": [
+        "(?<!\\p{L})lo que nadie te cuenta(?!\\p{L})",
+        "(?<!\\p{L})lo que la mayor[íi]a pasa por alto(?!\\p{L})",
+        "(?<!\\p{L})el detalle que todos ignoran(?!\\p{L})",
+        "(?<!\\p{L})nadie habla de esto(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "colon-reveal",
+      "lang": "any",
+      "severity": "warn",
+      "message": "Colon reveal. Colons are for lists, labels and quotes, not for drama. Write it as a plain sentence.",
+      "flags": "gmu",
+      "regexes": [
+        "^\\p{Lu}[\\p{L}'-]*(?:\\s+[\\p{L}'-]+){1,7}:\\s+\\p{Ll}[^\\n.!?]{10,}[.!?]"
+      ]
+    },
+    {
+      "id": "superficial-analysis",
+      "lang": "en",
+      "severity": "error",
+      "message": "Trailing -ing clause that pretends to explain meaning. Say the consequence instead.",
+      "regexes": [
+        ",\\s+(?:highlighting|underscoring|reflecting|showcasing|demonstrating|emphasizing|signaling|signalling|cementing)(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "superficial-analysis",
+      "lang": "es",
+      "severity": "error",
+      "message": "Gerundio de relleno al final. Decí la consecuencia concreta.",
+      "regexes": [
+        ",\\s+(?:demostrando|reflejando|evidenciando|consolidando|posicionando|marcando|dejando en claro)(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "importance-puffery",
+      "lang": "en",
+      "severity": "error",
+      "message": "Importance puffery. State the fact and let the reader decide if it matters.",
+      "regexes": [
+        "(?<!\\p{L})stands as a testament(?!\\p{L})",
+        "(?<!\\p{L})marks a pivotal moment(?!\\p{L})",
+        "(?<!\\p{L})plays a (?:vital|crucial|key) role(?!\\p{L})",
+        "(?<!\\p{L})solidifies its position(?!\\p{L})",
+        "(?<!\\p{L})underscores its significance(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "importance-puffery",
+      "lang": "es",
+      "severity": "error",
+      "message": "Inflar la importancia. Poné el hecho y que el lector juzgue.",
+      "regexes": [
+        "(?<!\\p{L})es un hito(?!\\p{L})",
+        "(?<!\\p{L})juega un papel (?:fundamental|clave|crucial)(?!\\p{L})",
+        "(?<!\\p{L})es una muestra del compromiso(?!\\p{L})",
+        "(?<!\\p{L})subraya la importancia de(?!\\p{L})",
+        "(?<!\\p{L})se consolida como referente(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "weasel-attribution",
+      "lang": "en",
+      "severity": "error",
+      "message": "Weasel attribution. Name the source or cut the claim.",
+      "regexes": [
+        "(?<!\\p{L})experts agree(?!\\p{L})",
+        "(?<!\\p{L})industry reports suggest(?!\\p{L})",
+        "(?<!\\p{L})many argue(?!\\p{L})",
+        "(?<!\\p{L})widely regarded as(?!\\p{L})",
+        "(?<!\\p{L})studies show(?!\\p{L})"
+      ]
+    },
+    {
+      "id": "weasel-attribution",
+      "lang": "es",
+      "severity": "error",
+      "message": "Atribución con comadreja. Nombrá la fuente o cortá la afirmación.",
+      "regexes": [
+        "(?<!\\p{L})los expertos coinciden(?!\\p{L})",
+        "(?<!\\p{L})diversos estudios demuestran(?!\\p{L})",
+        "(?<!\\p{L})muchos aseguran(?!\\p{L})",
+        "(?<!\\p{L})se estima que(?!\\p{L})",
+        "(?<!\\p{L})seg[úu]n fuentes del sector(?!\\p{L})",
+        "(?<!\\p{L})es sabido que(?!\\p{L})"
+      ]
+    }
+  ]
+}

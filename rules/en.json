@@ -1,0 +1,44 @@
+{
+  "lang": "en",
+  "groups": [
+    {
+      "id": "banned",
+      "severity": "error",
+      "message": "AI vocabulary. Say it in a word a person would use.",
+      "terms": [
+        "delve", "foster", "utilize", "facilitate", "empower", "cutting-edge",
+        "paradigm shift", "game changer", "this is huge", "this changes everything",
+        "tapestry", "realm", "beacon", "multifaceted", "meticulous", "intricate",
+        "paramount", "transformative", "elevate", "embark", "supercharge",
+        "harness", "ever-evolving"
+      ]
+    },
+    {
+      "id": "context",
+      "severity": "warn",
+      "message": "Filler in marketing prose, real meaning in technical prose. Keep it only if a plainer word loses something.",
+      "terms": ["leverage", "robust", "streamline"]
+    },
+    {
+      "id": "adverbs",
+      "severity": "warn",
+      "message": "Usually an empty adverb. Keep it only for emphasis, doubt, contrast, or your spoken rhythm.",
+      "terms": [
+        "just", "literally", "honestly", "simply", "actually", "truly",
+        "fundamentally", "importantly", "crucially", "inherently", "inevitably"
+      ]
+    },
+    {
+      "id": "phrases",
+      "severity": "warn",
+      "message": "Delays the point. Cut it and start at the point.",
+      "terms": [
+        "it's worth noting", "it is worth noting", "it's important to note",
+        "it is important to note", "at the end of the day", "when it comes to",
+        "at its core", "in today's world", "in the age of", "in the world of",
+        "the reality is", "the truth is", "in terms of", "with regard to",
+        "in order to", "going forward", "in this article", "let's dive in"
+      ]
+    }
+  ]
+}

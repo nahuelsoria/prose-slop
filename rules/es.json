@@ -1,0 +1,55 @@
+{
+  "lang": "es",
+  "groups": [
+    {
+      "id": "banned",
+      "severity": "error",
+      "message": "Vocabulario de IA. Decilo con una palabra que usaría una persona.",
+      "terms": [
+        "sumergirse", "sumérgete", "adentrarse en", "revolucionario", "disruptivo",
+        "cambio de paradigma", "un antes y un después", "esto lo cambia todo",
+        "tapiz", "faro", "sinergia", "empoderar", "de vanguardia", "transformador",
+        "en constante evolución", "sin precedentes", "imperdible",
+        "la joya de la corona", "el santo grial", "no es casualidad que"
+      ]
+    },
+    {
+      "id": "context",
+      "severity": "warn",
+      "message": "Relleno en copy de marketing, sentido real en texto técnico. Dejala solo si una palabra más común pierde algo.",
+      "terms": ["robusto", "optimizar", "escalar", "potenciar", "ecosistema"]
+    },
+    {
+      "id": "adverbs",
+      "severity": "warn",
+      "message": "Muletilla casi siempre vacía. Dejala solo si marca énfasis, duda, contraste o ritmo hablado.",
+      "terms": [
+        "simplemente", "literalmente", "realmente", "sinceramente", "honestamente",
+        "básicamente", "obviamente", "claramente", "indudablemente", "sin duda",
+        "precisamente", "totalmente"
+      ]
+    },
+    {
+      "id": "phrases",
+      "severity": "warn",
+      "message": "Demora el punto. Cortala y empezá por el punto.",
+      "terms": [
+        "vale la pena destacar", "cabe destacar", "es importante mencionar",
+        "hay que tener en cuenta que", "en definitiva", "a fin de cuentas",
+        "al final del día", "en el mundo de", "en la era de", "en el mundo actual",
+        "hoy en día", "cuando se trata de", "en esencia", "la realidad es que",
+        "la verdad es que", "en términos de", "con respecto a", "de cara al futuro",
+        "en este artículo", "vamos a ver", "sin más preámbulos", "dicho esto"
+      ]
+    },
+    {
+      "id": "verbos",
+      "severity": "warn",
+      "message": "Verbo inflado. Decí qué hace, no qué representa.",
+      "terms": [
+        "se erige como", "se posiciona como", "se consolida como",
+        "viene a resolver", "marca el camino", "redefine", "reinventa"
+      ]
+    }
+  ]
+}
