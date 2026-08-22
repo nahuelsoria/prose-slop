@@ -1,0 +1,7 @@
+I published prose-slop, a linter that reads your prose instead of your code. English and Spanish.
+
+Before publishing I ran it over 173 markdown files I had written myself, mostly to find out how noisy it was. Pretty noisy. "harness" came up 6 times and all 6 were "test harness". It read "Stack completo:" as a dramatic colon reveal. Both of those were my rules being wrong, so I rewrote them.
+
+On the same corpus it now reports 378 errors, and 374 of them are em dashes and curly quotes.
+
+npm i -g prose-slop

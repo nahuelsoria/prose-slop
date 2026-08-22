@@ -23,6 +23,7 @@ Options
   --strict                    exit 1 on warnings too, not only on errors
   --json                      machine-readable findings
   --quiet                     print errors only
+  --enable <rule>             turn on an opt-in rule (repeatable)
   --config <path>             config file; default is the nearest .proseslop.json
   --no-color                  plain output
 
@@ -30,7 +31,7 @@ Use - to read stdin. Exit code is 1 when the gate fails, 2 on a usage error.
 `;
 
 function parseArgs(argv) {
-  const opts = { command: null, files: [], lang: null, format: null, strict: false, json: false, quiet: false, color: null, config: null };
+  const opts = { command: null, files: [], enable: null, lang: null, format: null, strict: false, json: false, quiet: false, color: null, config: null };
   const commands = new Set(['check', 'fix', 'strip', 'rules', 'help', 'version']);
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -41,6 +42,7 @@ function parseArgs(argv) {
     else if (a === '--quiet' || a === '-q') opts.quiet = true;
     else if (a === '--no-color') opts.color = false;
     else if (a === '--lang') opts.lang = argv[++i];
+    else if (a === '--enable') (opts.enable = opts.enable || []).push(argv[++i]);
     else if (a === '--format') opts.format = argv[++i];
     else if (a === '--config') opts.config = argv[++i];
     else if (a.startsWith('--')) fail(`unknown option: ${a}`);
@@ -145,6 +147,7 @@ function run() {
     lang: opts.lang || config.lang || 'auto',
     disable: config.disable || [],
     add: config.add || {},
+    enable: [...(config.enable || []), ...(opts.enable || [])],
   };
   if (!['auto', 'en', 'es'].includes(base.lang)) fail(`unknown language: ${base.lang}`);
   if (opts.format && !['markdown', 'plain'].includes(opts.format)) fail(`unknown format: ${opts.format}`);

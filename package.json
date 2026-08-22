@@ -1,7 +1,7 @@
 {
   "name": "prose-slop",
-  "version": "0.1.0",
-  "description": "Lint the prose you publish for AI slop, in English and Spanish. Em dashes, banned vocabulary and the structural patterns. Zero dependencies.",
+  "version": "0.2.0",
+  "description": "Lint the prose you publish for AI slop, in English and Spanish. Vocabulary, sentence patterns and the cadence of the whole document. Zero dependencies.",
   "keywords": [
     "ai-slop",
     "slop",
@@ -14,7 +14,10 @@
     "spanish",
     "espanol",
     "ai-detection",
-    "content"
+    "content",
+    "cadence",
+    "structure",
+    "linter"
   ],
   "license": "MIT",
   "author": "Nahuel Soria",

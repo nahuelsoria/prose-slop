@@ -55,7 +55,7 @@ is. A directory walk picks up `.md`, `.markdown`, `.mdx` and `.txt`, and skips
 | `phrases` | warn | `at the end of the day`, `in today's world` | `hoy en día`, `cabe destacar`, `vale la pena destacar` |
 | `verbos` | warn | | `se erige como`, `se posiciona como`, `viene a resolver` |
 
-Plus seven structural patterns, which survive translation and ship in both
+Plus seven sentence patterns, which survive translation and ship in both
 languages:
 
 - **binary-contrast**: `The question isn't the model, it's the eval.` / `No se trata de X. Se trata de Y.`
@@ -71,6 +71,41 @@ real in technical writing and nothing at all in marketing copy: `robust` earns i
 place in `a robust retry policy` and never in `a robust solution`. The tool
 reports both and lets you decide, which is why `context`, `adverbs` and `phrases`
 are warnings.
+
+## It also reads the shape of the document
+
+Word rules miss the thing most people notice first. A draft can pass every
+vocabulary check and still read as generated, because what gives it away is the
+cadence: paragraphs of equal size, sentences of equal length, three bullets that
+open the same way, and a lesson dropped on its own line at the end.
+
+Seven cadence rules run over the parsed document instead of over a span of text:
+
+| Rule | What it looks for |
+| --- | --- |
+| `structure.aphoristic-closer` | The piece ends on a standalone one-liner that generalises |
+| `structure.closing-question` | It ends on a question aimed at the reader |
+| `structure.parallel-openers` | Three or more sentences in a row start with the same word |
+| `structure.uniform-rhythm` | Every sentence is about the same length |
+| `structure.uniform-paragraphs` | Every paragraph is the same size |
+| `structure.listicle-bullets` | Three or more bullets open with the same bolded lead-in |
+| `structure.fragment-drama` | One-beat fragments used as a tic (opt-in, see below) |
+
+All of them are warnings. Rhythm is a style choice and a linter has no business
+calling it an error.
+
+They only run on flowing prose. A block of short lines is a note, a spec or a CV,
+so cadence rules skip it, and so do quoted lines, tables and headings. That gate
+is what took the false positives on a 173-file corpus from 47 down to 12.
+
+`structure.fragment-drama` ships off by default. The tic is real, but on that
+same corpus it only ever fired on CVs, trackers and prompt files, never on
+narrative. A rule that cannot tell a clipped instruction from a dramatic beat
+does not belong in the default set, so you turn it on yourself:
+
+```bash
+slop check --enable structure.fragment-drama post.md
+```
 
 ## What it rewrites, and what it refuses to
 
@@ -116,13 +151,14 @@ Drop a `.proseslop.json` anywhere above the files you lint:
   "lang": "auto",
   "strict": false,
   "disable": ["en.adverbs", "es.banned.faro"],
+  "enable": ["structure.fragment-drama"],
   "add": { "es": { "banned": ["mojon"] } }
 }
 ```
 
 `disable` takes a rule id (`es.banned.faro`), a group (`en.adverbs`) or a whole
-family (`chars`). `add` extends a group with your own terms. Run `slop rules` for
-the full list of ids.
+family (`chars`, `structure`). `enable` turns on the opt-in rules. `add` extends a
+group with your own terms. Run `slop rules` for the full list of ids.
 
 `lang` defaults to `auto`, which runs both rule sets, because the two vocabularies
 barely overlap and a lot of writing mixes languages. Pin it with `--lang en` or
@@ -166,9 +202,14 @@ stay honest.
 A linter that shouts at good prose gets turned off, so the rules were tuned
 against real writing rather than against invented examples. Over 173 markdown
 files from a personal vault and a working publishing repo, `prose-slop` reports
-378 errors: 374 of them are the typographic characters, 4 are real vocabulary
-hits, and 18 warnings. The vocabulary and pattern rules stay quiet on prose that
-a person wrote, which is the whole design target.
+380 errors, and 374 of them are the typographic characters. The vocabulary and
+pattern rules stay quiet on prose that a person wrote, which is the whole design
+target.
+
+The cadence rules report 12 findings across those same 173 files. Reading them
+one by one is worth the trouble: the documents behind the rhythm warnings turned
+out to be the ones an agent had written, so the rule was right and the corpus was
+not as human as it looked.
 
 That run is also what narrowed two rules. `harness` used to fire on every
 mention of a test harness, so now only the verb forms count. The colon-reveal

@@ -1,0 +1,11 @@
+I shipped prose-slop, an AI-slop linter for the prose you publish, not for your code. English and Spanish, zero dependencies.
+
+I ran it over 173 of my own markdown files before publishing, and my own corpus killed two of my rules.
+
+"harness" fired 6 times out of 6, always on "test harness". The colon-reveal check read "Stack completo:" as fake drama. Both rules were wrong, not my writing.
+
+Final ratio: 378 errors, 374 of them typographic characters. The vocabulary rules stay quiet on prose a human wrote.
+
+A linter that yells at good writing gets uninstalled.
+
+npm i -g prose-slop

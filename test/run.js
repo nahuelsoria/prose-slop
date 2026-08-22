@@ -240,6 +240,77 @@ test('a usage error exits 2 without a stack trace', () => {
   assert.strictEqual(out.code, 2);
 });
 
+// --- structure --------------------------------------------------------------
+
+const NARRATIVA =
+  'Compare este parrafo con el resto del documento, porque necesita largo real para contar como narrativa y no como una nota suelta de dos palabras sueltas en una linea.\n\n' +
+  'Otro parrafo con suficiente cuerpo para que el documento entero pase el filtro de prosa y las reglas de cadencia se activen sobre algo que valga la pena medir.\n\n' +
+  'Un tercero que suma las palabras necesarias para pasar los pisos minimos, porque una regla de cadencia sobre cuatro oraciones no mide nada y no deberia opinar.\n\n';
+
+test('the aphoristic closer fires on a generated post and not on the rewrite', () => {
+  const generado = fs.readFileSync(path.join(__dirname, 'fixtures', 'generated-post.txt'), 'utf8');
+  const reescrito = fs.readFileSync(path.join(__dirname, 'fixtures', 'rewritten-post.txt'), 'utf8');
+  assert.ok(ids(generado).includes('structure.aphoristic-closer'));
+  assert.deepStrictEqual(ids(reescrito), []);
+});
+
+test('the closer rule looks past a trailing install line', () => {
+  const conCTA = NARRATIVA + 'A linter that yells at good writing gets uninstalled.\n\nnpm i -g prose-slop\n';
+  assert.ok(ids(conCTA).includes('structure.aphoristic-closer'));
+});
+
+test('an instruction, a spec line or a conditional is not an aphorism', () => {
+  for (const cierre of [
+    'Use one worktree per agent and review the diff before pushing.',
+    'Solo lectura, tope diario, cero merges automaticos.',
+    'Si tengo que recortar el mensaje antes de publicarlo, pierdo tiempo.',
+    'El deploy tarda 4 minutos.',
+  ]) {
+    assert.deepStrictEqual(ids(NARRATIVA + cierre + '\n'), [], cierre);
+  }
+});
+
+test('three sentences opening with the same word are a pattern, in a list they are not', () => {
+  const parrafo = NARRATIVA + 'This is the first one and it runs long enough. This is the second one with a similar shape. This is the third one closing the run.\n';
+  assert.ok(ids(parrafo).includes('structure.parallel-openers'));
+  const lista = NARRATIVA + '- This is the first item of the list\n- This is the second item of the list\n- This is the third item of the list\n';
+  assert.ok(!md(lista).includes('structure.parallel-openers'));
+});
+
+test('uniform sentence length is flagged and varied length is not', () => {
+  // Nine sentences of exactly the same length, three per paragraph.
+  const frase = (i) => `Esta oracion numero ${i} tiene doce palabras justas para medir el ritmo.`;
+  const uniforme = [0, 1, 2]
+    .map((p) => [0, 1, 2].map((j) => frase(p * 3 + j)).join(' '))
+    .join('\n\n');
+  assert.ok(ids(uniforme).includes('structure.uniform-rhythm'));
+  const variado = NARRATIVA + 'Corta. Esta segunda oracion se extiende bastante mas y agrega detalle concreto sobre lo que paso el martes a la tarde. Otra corta. Y esta ultima vuelve a estirarse con una explicacion larga que cambia el ritmo del parrafo por completo.\n';
+  assert.ok(!ids(variado).includes('structure.uniform-rhythm'));
+});
+
+test('bolded listicle lead-ins are flagged, a definition list is not', () => {
+  const listicle = NARRATIVA + '- **Start with the user first**: escribi lo que necesita.\n- **Measure before you tune it**: sin numeros no hay ajuste.\n- **Ship it and then iterate**: el resto es teoria.\n';
+  assert.ok(md(listicle).includes('structure.listicle-bullets'));
+  const definiciones = NARRATIVA + '- **chars**: los caracteres tipograficos.\n- **banned**: el vocabulario prohibido.\n- **context**: las palabras que dependen del contexto.\n';
+  assert.ok(!md(definiciones).includes('structure.listicle-bullets'));
+});
+
+test('cadence rules stay out of note-shaped blocks', () => {
+  const notas = '## Focus\n\nOne thing: validar.\nWhy: importa.\nQuien: yo.\nCuando: hoy.\n';
+  assert.deepStrictEqual(md(notas).filter((i) => i.startsWith('structure')), []);
+});
+
+test('fragment-drama is off by default and can be turned on', () => {
+  const texto = NARRATIVA + 'Probe el deploy y fallo. Otra vez. Lo corri de nuevo con el flag puesto y volvio a fallar igual. Otra vez. Mire los logs completos y no decian nada util. Nada. Al final era el DNS. Siempre.\n';
+  assert.ok(!ids(texto).includes('structure.fragment-drama'));
+  assert.ok(ids(texto, { enable: ['structure.fragment-drama'] }).includes('structure.fragment-drama'));
+});
+
+test('bare domains and emails are masked out of the prose', () => {
+  assert.deepStrictEqual(md('Escribime a delve@gmail.com o entra a delve.com/harness'), []);
+  assert.deepStrictEqual(md('Node.js y package.json siguen siendo prosa: delve.'), ['en.banned.delve']);
+});
+
 // --- dogfood ----------------------------------------------------------------
 
 test('the README passes its own linter', () => {
