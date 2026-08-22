@@ -125,7 +125,19 @@ test('structural patterns fire in both languages', () => {
 test('a colon reveal is a warning, a label is not', () => {
   const reveal = slop.check('The best part: it learns from the corrections.', { format: 'plain' });
   assert.ok(reveal.some((f) => f.ruleId === 'pattern.colon-reveal' && f.severity === 'warn'));
+  assert.ok(ids('Lo mejor: aprende de las correcciones.').includes('pattern.colon-reveal'));
+  assert.ok(ids('El detalle que lo hace funcionar: un agente aparte lo califica.').includes('pattern.colon-reveal'));
+  // Labels the rule explicitly allows. Every one of these came out of a real
+  // vault and used to be a false positive under the old syntactic heuristic.
   assert.deepStrictEqual(md('Install: `npm i`'), []);
+  assert.deepStrictEqual(ids('Stack completo: bash, jq, cron, la CLI de Vercel.'), []);
+  assert.deepStrictEqual(ids('Objetivo declarado: bajar grasa y subir masa muscular.'), []);
+  assert.deepStrictEqual(ids('Tentative dates: travel to Brazil in June.'), []);
+});
+
+test('harness is slop as a verb and fine as a noun', () => {
+  assert.deepStrictEqual(ids('The test harness the team built works.'), []);
+  assert.deepStrictEqual(ids('Harnessing the power of AI.'), ['en.banned.harnessing']);
 });
 
 // --- positions and suppressions ---------------------------------------------
@@ -208,6 +220,24 @@ test('rules lists every id', () => {
   const out = cli(['rules']).stdout.trim().split('\n');
   assert.deepStrictEqual(out, allRuleIds());
   assert.ok(out.length > 120);
+});
+
+test('a big --json report survives the pipe', () => {
+  // process.exit() used to truncate this mid-string once the report outgrew the
+  // pipe buffer, which made the output unparseable exactly when it mattered.
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-slop-big-'));
+  const line = 'Un parrafo con un guion largo — adentro y una comilla “rara”.\n';
+  for (let i = 0; i < 40; i++) fs.writeFileSync(path.join(dir, `f${i}.md`), line.repeat(30));
+  const out = cli(['check', '--json', dir]);
+  const parsed = JSON.parse(out.stdout);
+  assert.strictEqual(parsed.errors, 40 * 30 * 3);
+  assert.strictEqual(out.code, 1);
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('a usage error exits 2 without a stack trace', () => {
+  const out = cli(['check', '--lang', 'fr', '-'], 'x');
+  assert.strictEqual(out.code, 2);
 });
 
 // --- dogfood ----------------------------------------------------------------

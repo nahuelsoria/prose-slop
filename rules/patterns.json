@@ -74,12 +74,24 @@
     },
     {
       "id": "colon-reveal",
-      "lang": "any",
+      "lang": "en",
       "severity": "warn",
       "message": "Colon reveal. Colons are for lists, labels and quotes, not for drama. Write it as a plain sentence.",
-      "flags": "gmu",
       "regexes": [
-        "^\\p{Lu}[\\p{L}'-]*(?:\\s+[\\p{L}'-]+){1,7}:\\s+\\p{Ll}[^\\n.!?]{10,}[.!?]"
+        "(?<!\\p{L})the (?:best|worst|weird|weirdest|real|fun|funny|interesting|hard|hardest) part\\s*:\\s+\\p{Ll}",
+        "(?<!\\p{L})the (?:detail|thing|twist|kicker|catch|trick|secret|upshot)(?: that [^:\\n]{2,60})?\\s*:\\s+\\p{Ll}",
+        "(?<!\\p{L})what (?:makes|made|breaks|broke) [^:\\n]{2,60}\\s*:\\s+\\p{Ll}"
+      ]
+    },
+    {
+      "id": "colon-reveal",
+      "lang": "es",
+      "severity": "warn",
+      "message": "Revelación con dos puntos. Los dos puntos son para listas, etiquetas y citas, no para el suspenso. Escribilo como oración normal.",
+      "regexes": [
+        "(?<!\\p{L})lo (?:mejor|peor|raro|loco|bueno|jodido|interesante)(?: de [^:\\n]{2,60})?\\s*:\\s+\\p{Ll}",
+        "(?<!\\p{L})(?:el detalle|el truco|el problema real|la clave|la trampa|la vuelta)(?: (?:que|de) [^:\\n]{2,60})?\\s*:\\s+\\p{Ll}",
+        "(?<!\\p{L})lo que (?:lo )?(?:hace|rompe|cambia|salva) [^:\\n]{2,60}\\s*:\\s+\\p{Ll}"
       ]
     },
     {

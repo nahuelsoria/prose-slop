@@ -51,9 +51,13 @@ function parseArgs(argv) {
   return opts;
 }
 
+// Thrown instead of exiting on the spot. Exiting mid-run drops whatever is still
+// buffered for a pipe, which truncated a large --json report in the middle of a
+// string and made it unparseable exactly when the report was worth reading.
+class UsageError extends Error {}
+
 function fail(message) {
-  process.stderr.write(`prose-slop: ${message}\n`);
-  process.exit(2);
+  throw new UsageError(message);
 }
 
 function findConfig(explicit) {
@@ -130,7 +134,7 @@ function makePaint(enabled) {
   return { red: wrap(31), yellow: wrap(33), dim: wrap(2), bold: wrap(1), green: wrap(32) };
 }
 
-function main() {
+function run() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.command === 'help') return void process.stdout.write(USAGE);
   if (opts.command === 'version') return void process.stdout.write(pkg.version + '\n');
@@ -207,7 +211,13 @@ function main() {
     }
   }
 
-  process.exit(errors > 0 || (strict && warnings > 0) ? 1 : 0);
+  process.exitCode = errors > 0 || (strict && warnings > 0) ? 1 : 0;
 }
 
-main();
+try {
+  run();
+} catch (err) {
+  if (!(err instanceof UsageError)) throw err;
+  process.stderr.write(`prose-slop: ${err.message}\n`);
+  process.exitCode = 2;
+}

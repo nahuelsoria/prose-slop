@@ -161,6 +161,20 @@ git diff --cached --name-only --diff-filter=ACM -z \
 This repo lints its own README on every test run, which is how the examples above
 stay honest.
 
+## Noise, measured
+
+A linter that shouts at good prose gets turned off, so the rules were tuned
+against real writing rather than against invented examples. Over 173 markdown
+files from a personal vault and a working publishing repo, `prose-slop` reports
+378 errors: 374 of them are the typographic characters, 4 are real vocabulary
+hits, and 18 warnings. The vocabulary and pattern rules stay quiet on prose that
+a person wrote, which is the whole design target.
+
+That run is also what narrowed two rules. `harness` used to fire on every
+mention of a test harness, so now only the verb forms count. The colon-reveal
+check used to read `Stack completo:` and `Objetivo declarado:` as drama, so it
+now looks for the phrases that promise a reveal.
+
 ## Where the rules come from
 
 The character table has been gating a fleet of unattended writing agents since
