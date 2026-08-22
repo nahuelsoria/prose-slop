@@ -7,9 +7,14 @@
       "severity": "error",
       "message": "Binary contrast. State the second half directly and drop the first.",
       "regexes": [
-        "(?<!\\p{L})it'?s not (?:just )?[^.!?\\n]{1,60}[,.]\\s*it'?s(?!\\p{L})",
+        "(?<!\\p{L})(?:it|this|that)(?:'s| is|'re| are)? (?:not|isn'?t) (?:just )?[^.!?\\n]{2,60}[,.]\\s*(?:it'?s|it is|but)(?!\\p{L})",
         "(?<!\\p{L})the question (?:isn'?t|is not)(?!\\p{L})",
-        "(?<!\\p{L})not just[^.!?\\n]{1,60}(?<!\\p{L})but(?!\\p{L})"
+        "(?<!\\p{L})not just[^.!?\\n]{1,60}(?<!\\p{L})but(?!\\p{L})",
+        "(?<!\\p{L})(?:isn'?t|aren'?t|wasn'?t|is not|are not) (?:about|the)[^.!?\\n]{2,50}[.,]\\s*(?:it'?s|it is|they'?re)(?!\\p{L})",
+        "(?<!\\p{L})not because[^.!?\\n]{2,60}(?<!\\p{L})but(?!\\p{L})",
+        "(?<!\\p{L})(?:less|fewer)[^.!?\\n]{2,40},\\s*more(?!\\p{L})",
+        "(?<!\\p{L})stop[^.!?\\n]{2,40},\\s*start(?!\\p{L})",
+        "(?<!\\p{L})you (?:don'?t|do not) need[^.!?\\n]{2,50}[.,]\\s*you need(?!\\p{L})"
       ]
     },
     {
@@ -19,8 +24,13 @@
       "message": "Contraste binario. Decí la segunda mitad y borrá la primera.",
       "regexes": [
         "(?<!\\p{L})no se trata de[^.!?\\n]{1,80}[.,]\\s*se trata de(?!\\p{L})",
+        "(?<!\\p{L})no se trata de[^.!?\\n]{2,60}(?<!\\p{L})sino(?!\\p{L})",
         "(?<!\\p{L})no es s[oó]lo[^.!?\\n]{1,80}(?<!\\p{L})sino(?!\\p{L})",
-        "(?<!\\p{L})la pregunta no es(?!\\p{L})"
+        "(?<!\\p{L})la pregunta no es(?!\\p{L})",
+        "(?<!\\p{L})no es (?:el|la|un|una|tu|su|mi)[^.!?\\n]{2,50}[.,]\\s*es(?!\\p{L})",
+        "(?<!\\p{L})no porque[^.!?\\n]{2,60}(?<!\\p{L})sino(?!\\p{L})",
+        "(?<!\\p{L})menos[^.!?\\n]{2,40},\\s*m[áa]s(?!\\p{L})",
+        "(?<!\\p{L})deja(?:te)? de[^.!?\\n]{2,40},\\s*(?:empez[áa]|comenz[áa]|hac[ée]|pon[ée])(?!\\p{L})"
       ]
     },
     {
@@ -164,6 +174,27 @@
         "(?<!\\p{L})seg[úu]n fuentes del sector(?!\\p{L})",
         "(?<!\\p{L})es sabido que(?!\\p{L})"
       ]
+    },
+    {
+      "id": "negated-tail",
+      "lang": "en",
+      "severity": "warn",
+      "message": "Antithesis tacked onto the end. If the pair is abstract, state what it is and drop what it is not.",
+      "regexes": [
+        ",\\s+not\\s+(?!(?:yet|really|always|never|now|anymore|quite|even|only|just|because|if|when|unless|sure|enough|necessarily|all|everyone|everything)(?!\\p{L}))(?:the|a|an|my|your|his|her|its|our|their|for|about|to|in|with|from)\\s+[^.!?\\n\\p{Lu}\\d`]{2,40}[.!?]",
+        ",\\s+not\\s+(?!(?:yet|really|always|never|now|anymore|quite|even|only|just|because|if|when|unless|sure|enough|necessarily|all|everyone|everything)(?!\\p{L}))\\p{Ll}+(?:\\s+\\p{Ll}+)?[.!?]"
+      ],
+      "flags": "gmu"
+    },
+    {
+      "id": "negated-tail",
+      "lang": "es",
+      "severity": "warn",
+      "message": "Antítesis pegada al final. Si el par es abstracto, decí lo que es y borrá lo que no es.",
+      "regexes": [
+        ",\\s+no\\s+(?:el|la|los|las|un|una|unos|unas|mi|mis|tu|tus|su|sus|nuestro|nuestra|nuestros|nuestras)\\s+[^.!?\\n\\p{Lu}\\d`]{2,40}[.!?]"
+      ],
+      "flags": "gmu"
     }
   ]
 }

@@ -140,6 +140,49 @@ test('harness is slop as a verb and fine as a noun', () => {
   assert.deepStrictEqual(ids('Harnessing the power of AI.'), ['en.banned.harnessing']);
 });
 
+test('the negated tail is caught in both languages', () => {
+  assert.ok(ids('Both rules were wrong, not my writing.').includes('pattern.negated-tail'));
+  assert.ok(ids('It is a linter, not a rewriter.').includes('pattern.negated-tail'));
+  assert.ok(ids('Las dos reglas estaban mal, no mi texto.').includes('pattern.negated-tail'));
+  assert.ok(ids('Es una herramienta, no un juguete.').includes('pattern.negated-tail'));
+});
+
+test('a tail that disambiguates something concrete is left alone', () => {
+  // The capital letter and the digit are the signal: naming a specific thing is
+  // a legitimate use of the construction, not rhetoric.
+  for (const frase of [
+    'It runs on Neon, not the VPS Postgres.',
+    'Corre en Neon, no la base de Vercel.',
+    'El deploy tarda 4 minutos, no los 20 de antes.',
+    'I shipped it, not really tested.',
+    'It broke twice, not because of the code.',
+  ]) {
+    assert.ok(!ids(frase).includes('pattern.negated-tail'), frase);
+  }
+});
+
+test('the flags on negated-tail keep the case check alive', () => {
+  // Regression: with the i flag, \p{Lu} inside a negated class case-folds and
+  // excludes every letter, so the rule silently matched nothing at all.
+  const { compile } = require('../lib/rules.js');
+  const cola = compile().patterns.filter((p) => p.id === 'pattern.negated-tail');
+  assert.ok(cola.length > 0);
+  assert.ok(cola.every((p) => !p.regex.flags.includes('i')));
+});
+
+test('the extended binary contrast forms are caught', () => {
+  assert.ok(ids('This is not about speed. It is about trust.').includes('pattern.binary-contrast'));
+  assert.ok(ids('You do not need a framework. You need a function.').includes('pattern.binary-contrast'));
+  assert.ok(ids('Less configuration, more defaults everywhere.').includes('pattern.binary-contrast'));
+  assert.ok(ids('Menos configuracion, mas defaults en todos lados.').includes('pattern.binary-contrast'));
+  assert.ok(ids('No se trata del modelo sino del eval.').includes('pattern.binary-contrast'));
+});
+
+test('two regexes of one rule over the same words report once', () => {
+  const found = ids('Both rules were wrong, not my writing.').filter((i) => i === 'pattern.negated-tail');
+  assert.strictEqual(found.length, 1);
+});
+
 // --- positions and suppressions ---------------------------------------------
 
 test('line and column point at the character', () => {

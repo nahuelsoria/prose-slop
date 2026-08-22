@@ -55,10 +55,11 @@ is. A directory walk picks up `.md`, `.markdown`, `.mdx` and `.txt`, and skips
 | `phrases` | warn | `at the end of the day`, `in today's world` | `hoy en día`, `cabe destacar`, `vale la pena destacar` |
 | `verbos` | warn | | `se erige como`, `se posiciona como`, `viene a resolver` |
 
-Plus seven sentence patterns, which survive translation and ship in both
+Plus eight sentence patterns, which survive translation and ship in both
 languages:
 
-- **binary-contrast**: `The question isn't the model, it's the eval.` / `No se trata de X. Se trata de Y.`
+- **binary-contrast**: `The question isn't the model, it's the eval.` / `No se trata de X sino de Y.` Also `less X, more Y`, `you don't need X, you need Y` and `menos X, más Y`
+- **negated-tail**: `It is a linter, not a rewriter.` / `Las dos reglas estaban mal, no mi texto.` (warn, see below)
 - **throat-clearing**: `Let me be clear,` / `Seamos sinceros,`
 - **faux-insight**: `Here's what nobody tells you.` / `Lo que nadie te cuenta.`
 - **colon-reveal**: `The best part: it learns.` (warn, the heuristic is fuzzy)
@@ -71,6 +72,13 @@ real in technical writing and nothing at all in marketing copy: `robust` earns i
 place in `a robust retry policy` and never in `a robust solution`. The tool
 reports both and lets you decide, which is why `context`, `adverbs` and `phrases`
 are warnings.
+
+`negated-tail` is a warning for the same reason, and it took some work to make it
+one worth reading. The shape is only rhetoric when the pair is abstract:
+`It is a linter, not a rewriter.` When the tail names something specific it is
+doing honest work, so `It runs on Neon, not the VPS Postgres.` stays quiet. The
+capital letter is what tells them apart, which is why that rule alone runs
+case-sensitive.
 
 ## It also reads the shape of the document
 
@@ -202,9 +210,9 @@ stay honest.
 A linter that shouts at good prose gets turned off, so the rules were tuned
 against real writing rather than against invented examples. Over 173 markdown
 files from a personal vault and a working publishing repo, `prose-slop` reports
-380 errors, and 374 of them are the typographic characters. The vocabulary and
-pattern rules stay quiet on prose that a person wrote, which is the whole design
-target.
+388 errors, and 375 of them are the typographic characters. Of the 13 that are
+left, 9 are binary contrasts and 4 are marketing vocabulary. The rules stay quiet
+on prose that a person wrote, which is the whole design target.
 
 The cadence rules report 12 findings across those same 173 files. Reading them
 one by one is worth the trouble: the documents behind the rhythm warnings turned
